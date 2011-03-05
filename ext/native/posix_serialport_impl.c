@@ -184,7 +184,7 @@ VALUE sp_listDevices_impl(class)
     */
     kern_return_t kernResult; 
     CFMutableDictionaryRef classesToMatch;
-    io_iterator_t serialPortIterator;
+    io_iterator_t portWalker;
 
     // Serial devices are instances of class IOSerialBSDClient
     classesToMatch = IOServiceMatching(kIOSerialBSDServiceValue);
@@ -195,7 +195,7 @@ VALUE sp_listDevices_impl(class)
         // Just RS-232 compliant devices...
         // CFDictionarySetValue(classesToMatch, CFSTR(kIOSerialBSDTypeKey), CFSTR(kIOSerialBSDRS232Type));
 
-        kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &serialPortIterator);    
+        kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &portWalker);    
         if (kernResult == KERN_SUCCESS) {               
             io_object_t port;
             while ((port = IOIteratorNext(portWalker))!=0) {
